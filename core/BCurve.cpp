@@ -1,13 +1,13 @@
-#include "BCurve.h"
-#include "Vector.h"
+#include "core/BCurve.h"
+#include "core/Vector.h"
 #include <cassert>
 
-BCurve::BCurve(int degree, const std::vector<Vector> &vertices, const std::vector<double> &knots, const std::vector<int> &mults) : degree(degree), vertices(vertices), knots(knots), mults(mults), weights() {
+BCurve::BCurve(int degree, const std::vector<Vector> &vertices, const std::vector<double> &knots, const std::vector<int> &mults) : degree(degree), vertices(vertices), knots(knots), weights(), mults(mults) {
     assert(knots.size() == mults.size());
     update_flat_knots();
 }
 
-BCurve::BCurve(int degree, const std::vector<Vector> &vertices, const std::vector<double> weights, const std::vector<double> &knots, const std::vector<int> &mults) : degree(degree), vertices(vertices), knots(knots), mults(mults), weights(weights) {
+BCurve::BCurve(int degree, const std::vector<Vector> &vertices, const std::vector<double> weights, const std::vector<double> &knots, const std::vector<int> &mults) : degree(degree), vertices(vertices), knots(knots), weights(weights), mults(mults) {
     assert(knots.size() == mults.size());
     update_flat_knots();
 }

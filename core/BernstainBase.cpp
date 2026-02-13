@@ -1,4 +1,4 @@
-#include "BernsteinBase.h"
+#include "core/BernsteinBase.h"
 #include <cassert>
 #include <cmath>
 

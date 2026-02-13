@@ -35,6 +35,10 @@ public:
         return self.coord[2];
     }
 
+    constexpr auto &&coordinate(this auto &&self) noexcept {
+        return self.coord;
+    }
+
     Vector &operator+=(const Vector &other);
     friend Vector operator+(Vector lhs, const Vector &rhs) {
         lhs += rhs;

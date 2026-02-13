@@ -1,15 +1,14 @@
 #pragma once
 
-#include "Vector.h"
+#include "core/Vector.h"
 #include <vector>
 
 class BezeirCurve {
 public:
-    BezeirCurve(std::vector<Vector> &vetices);
-
-    Vector eval(double t);
+    BezeirCurve(const std::vector<Vector> &vetices);
+    void setVertices(const std::vector<Vector> &vertices);
+    Vector eval(double t) const;
 
 private:
-    int degree;
     std::vector<Vector> vertices;
 };

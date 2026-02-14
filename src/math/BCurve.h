@@ -1,5 +1,5 @@
 #pragma once
-#include "core/Vector.h"
+#include "math/Vector.h"
 #include <vector>
 
 class BCurve {

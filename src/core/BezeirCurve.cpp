@@ -1,6 +1,6 @@
-#include "BezeirCurve.h"
-#include "BernsteinBase.h"
-#include "Vector.h"
+#include "math/BezeirCurve.h"
+#include "math/BernsteinBase.h"
+#include "math/Vector.h"
 #include <vector>
 
 BezeirCurve::BezeirCurve(const std::vector<Vector> &vertices) : vertices(vertices) {

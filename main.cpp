@@ -11,11 +11,11 @@
 // For a multi-platform app consider using e.g. SDL+DirectX on Windows and SDL+OpenGL on Linux/OSX.
 
 #include "SDL3/SDL.h"
-#include "core/BezeirCurve.h"
-#include "core/Vector.h"
 #include "imgui.h"
 #include "imgui_impl_sdl3.h"
 #include "imgui_impl_sdlrenderer3.h"
+#include "math/BezeirCurve.h"
+#include "math/Vector.h"
 #include <stdio.h>
 #include <vector>
 
@@ -119,6 +119,12 @@ int main(int, char **) {
             {540, 430, 0},
             {200, 430, 0},
         };
+        {
+            ImGui::Begin("curve drawer");
+            if (ImGui::Button("draw")) {
+            }
+            ImGui::End();
+        }
         {
             ImGui::Begin("control points");
             ImGui::Text("points:");

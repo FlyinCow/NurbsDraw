@@ -1,5 +1,5 @@
-#include "core/BCurve.h"
-#include "core/Vector.h"
+#include "BCurve.h"
+#include "Vector.h"
 #include <cassert>
 
 BCurve::BCurve(int degree, const std::vector<Vector> &vertices, const std::vector<double> &knots, const std::vector<int> &mults) : degree(degree), vertices(vertices), knots(knots), weights(), mults(mults) {

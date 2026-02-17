@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 23)
 
 include(FetchContent)
 
-set(FETCHCONTENT_FULLY_DISCONNECTED ON)
+set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
 FetchContent_Declare(
   imgui
   GIT_REPOSITORY https://github.com/ocornut/imgui.git

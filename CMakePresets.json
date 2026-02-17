@@ -9,7 +9,6 @@
         {
             "name": "base",
             "hidden": true,
-            "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
@@ -17,6 +16,7 @@
         },
         {
             "name": "windows",
+            "generator": "Ninja",
             "inherits": "base",
             "displayName": "WindowsToolchain + Ninja",
             "description": "Windows build using WindowsToolchain clang-cl",

@@ -14,26 +14,10 @@
 #include "imgui.h"
 #include "imgui_impl_sdl3.h"
 #include "imgui_impl_sdlrenderer3.h"
-#include "math/BezierCurve.h"
-#include "math/Vector.h"
+#include "gui/window/DrawBezier.h"
+#include "gui/window/Manager.h"
 #include <stdio.h>
-#include <vector>
 
-static std::vector<Vector> sample_bezier_uniform(
-    const BezierCurve &curve,
-    int segments) {
-    assert(segments >= 1);
-
-    std::vector<Vector> pts;
-    pts.reserve(segments + 1);
-
-    for (int i = 0; i <= segments; ++i) {
-        double t = static_cast<double>(i) / segments;
-        pts.push_back(curve.eval(t));
-    }
-
-    return pts;
-}
 
 // Main code
 int main(int, char **) {
@@ -86,6 +70,9 @@ int main(int, char **) {
     // Main loop
     bool done = false;
 
+    // Window manager and UI state moved to dedicated window function
+    auto &wm = WindowManager::Get();
+
     while (!done) {
         // Poll and handle events (inputs, window resize, etc.)
         // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
@@ -112,52 +99,9 @@ int main(int, char **) {
         ImGui_ImplSDLRenderer3_NewFrame();
         ImGui_ImplSDL3_NewFrame();
         ImGui::NewFrame();
-
-        static std::vector<Vector> vectors{
-            {0, 0, 0},
-            {100, 100, 0},
-            {540, 430, 0},
-            {200, 430, 0},
-        };
         {
-            ImGui::Begin("curve drawer");
-            if (ImGui::Button("draw")) {
-            }
-            ImGui::End();
-        }
-        {
-            ImGui::Begin("control points");
-            ImGui::Text("points:");
-            for (int i = 0; i < vectors.size(); i++) {
-                ImGui::PushID(i);
-                ImGui::InputScalarN("", ImGuiDataType_Double, vectors[i].coordinate(), 3);
-                ImGui::PopID();
-            }
-            if (ImGui::Button("Add")) {
-                vectors.push_back({});
-            }
-            ImGui::End();
-        }
-        static std::vector<ImVec2> control_polygon{};
-        static std::vector<ImVec2> curve{};
-        static BezierCurve c{vectors};
-        {
-            ImGui::Begin("dots");
-            auto canvas_pos = ImGui::GetCursorScreenPos();
-            control_polygon.clear();
-            c.setVertices(vectors);
-            curve.clear();
-            auto sampled = sample_bezier_uniform(c, 128);
-            for (auto &v : vectors) {
-                control_polygon.push_back({static_cast<float>(v.x()) + canvas_pos.x, static_cast<float>(v.y() + canvas_pos.y)});
-            }
-            for (auto &v : sampled) {
-                curve.push_back({static_cast<float>(v.x()) + canvas_pos.x, static_cast<float>(v.y() + canvas_pos.y)});
-            }
-            auto draw = ImGui::GetWindowDrawList();
-            draw->AddPolyline(control_polygon.data(), control_polygon.size(), IM_COL32(255, 0, 0, 255), false, 1.0);
-            draw->AddPolyline(curve.data(), curve.size(), IM_COL32(0, 255, 0, 255), false, 1.0);
-            ImGui::End();
+            // forward to our refactored window implementation
+            draw_bezier(wm, "curve drawer");
         }
         // Rendering
         ImGui::Render();

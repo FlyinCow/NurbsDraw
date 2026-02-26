@@ -36,10 +36,10 @@ double Vector::dot(Vector other) const noexcept {
     return x() * other.x() + y() * other.y() + z() * other.z();
 }
 
-double Vector::squareNorm() const noexcept {
+double Vector::square_norm() const noexcept {
     return dot(*this);
 }
 
-double Vector::Norm() const noexcept {
-    return std::sqrt(squareNorm());
+double Vector::norm() const noexcept {
+    return std::sqrt(square_norm());
 }

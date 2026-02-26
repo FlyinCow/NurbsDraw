@@ -62,8 +62,8 @@ public:
         return lhs;
     }
 
-    double squareNorm() const noexcept;
-    double Norm() const noexcept;
+    double square_norm() const noexcept;
+    double norm() const noexcept;
     double dot(Vector other) const noexcept;
 
 private:

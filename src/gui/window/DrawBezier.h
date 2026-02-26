@@ -3,4 +3,4 @@
 #include "gui/window/Manager.h"
 
 #include <string>
-void DrawBezier(WindowManager &wm, std::string window_name);
+void draw_bezier(WindowManager &wm, std::string window_name);

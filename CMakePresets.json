@@ -15,14 +15,14 @@
             }
         },
         {
-            "name": "windows",
+            "name": "windows-msvc",
             "generator": "Ninja",
             "inherits": "base",
-            "displayName": "WindowsToolchain + Ninja",
+            "displayName": "MSVC + Ninja",
             "description": "Windows build using WindowsToolchain clang-cl",
-            "toolchainFile": "${sourceDir}/cmake/WindowsToolChain/Windows.clang.toolchain.cmake",
+            "toolchainFile": "${sourceDir}/cmake/WindowsToolChain/Windows.MSVC.toolchain.cmake",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
+                "CMAKE_BUILD_TYPE": "Debug"
             },
             "condition": {
                 "type": "equals",
@@ -31,11 +31,19 @@
             }
         },
         {
-            "name": "windows-debug",
-            "inherits": "windows",
-            "binaryDir": "${sourceDir}/build/windows-debug",
+            "name": "windows-clang",
+            "generator": "Ninja",
+            "inherits": "base",
+            "displayName": "Clang + Ninja",
+            "description": "Windows build using WindowsToolchain clang-cl",
+            "toolchainFile": "${sourceDir}/cmake/WindowsToolChain/Windows.clang.toolchain.cmake",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
             }
         },
         {
@@ -70,11 +78,11 @@
     "buildPresets": [
         {
             "name": "windows",
-            "configurePreset": "windows"
+            "configurePreset": "windows-msvc"
         },
         {
             "name": "windows-debug",
-            "configurePreset": "windows-debug"
+            "configurePreset": "windows-msvc"
         },
         {
             "name": "linux-clang",

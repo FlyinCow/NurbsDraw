@@ -1,16 +1,16 @@
-#include "BezeirCurve.h"
+#include "BezierCurve.h"
 #include "BernsteinBase.h"
 #include "Vector.h"
 #include <vector>
 
-BezeirCurve::BezeirCurve(const std::vector<Vector> &vertices) : vertices(vertices) {
+BezierCurve::BezierCurve(const std::vector<Vector> &vertices) : vertices(vertices) {
 }
 
-void BezeirCurve::setVertices(const std::vector<Vector> &vertices) {
+void BezierCurve::setVertices(const std::vector<Vector> &vertices) {
     this->vertices = vertices;
 }
 
-Vector BezeirCurve::eval(double t) const {
+Vector BezierCurve::eval(double t) const {
     Vector res{};
     int n = vertices.size() - 1;
     for (auto i = 0; i <= n; i++) {

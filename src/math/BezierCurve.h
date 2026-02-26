@@ -4,9 +4,10 @@
 #include <cassert>
 #include <vector>
 
-class BezeirCurve {
+// corrected spelling: BezierCurve (not Bezeir)
+class BezierCurve {
 public:
-    BezeirCurve(const std::vector<Vector> &vetices);
+    BezierCurve(const std::vector<Vector> &vertices);
     void setVertices(const std::vector<Vector> &vertices);
     Vector eval(double t) const;
     auto &&vertex(this auto &&self, int i) {

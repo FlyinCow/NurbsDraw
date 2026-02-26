@@ -14,13 +14,13 @@
 #include "imgui.h"
 #include "imgui_impl_sdl3.h"
 #include "imgui_impl_sdlrenderer3.h"
-#include "math/BezeirCurve.h"
+#include "math/BezierCurve.h"
 #include "math/Vector.h"
 #include <stdio.h>
 #include <vector>
 
 static std::vector<Vector> sample_bezier_uniform(
-    const BezeirCurve &curve,
+    const BezierCurve &curve,
     int segments) {
     assert(segments >= 1);
 
@@ -140,7 +140,7 @@ int main(int, char **) {
         }
         static std::vector<ImVec2> control_polygon{};
         static std::vector<ImVec2> curve{};
-        static BezeirCurve c{vectors};
+        static BezierCurve c{vectors};
         {
             ImGui::Begin("dots");
             auto canvas_pos = ImGui::GetCursorScreenPos();

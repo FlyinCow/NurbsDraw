@@ -43,7 +43,21 @@ target_link_libraries(imgui_lib PRIVATE SDL3::SDL3)
 
 # ---- Your app ----
 
-file(GLOB_RECURSE sources ${CMAKE_SOURCE_DIR}/src/**/*.cpp ${CMAKE_SOURCE_DIR}/src/**/*.h)
+# Explicit source files (excludes old gui/ directory)
+set(sources
+    src/app/AppController.cpp
+    src/app/Command.cpp
+    src/app/Document.cpp
+    src/math/Vector.cpp
+    src/math/BezierCurve.cpp
+    src/math/BernsteinBase.cpp
+    src/math/BCurve.cpp
+    src/math/BSurface.cpp
+    src/math/Fitting.cpp
+    src/ui/canvas.cpp
+    src/ui/windows/curve2d.cpp
+    src/ui/windows/curve3d.cpp
+)
 
 add_executable(${PROJECT_NAME} main.cpp ${sources})
 
@@ -57,12 +71,5 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_23)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/src ${imgui_SOURCE_DIR} ${imgui_SOURCE_DIR}/backends ${sdl3_SOURCE_DIR}/include)
 
-# target_link_libraries(${PROJECT_NAME} PUBLIC SDL3::SDL3)
-
-if(CMAKE_EXPORT_COMPILE_COMMANDS)
-    execute_process(
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            ${CMAKE_BINARY_DIR}/compile_commands.json
-            ${CMAKE_SOURCE_DIR}/build/compile_commands.json
-    )
-endif()
+# ---- Tests ----
+add_subdirectory(tests)

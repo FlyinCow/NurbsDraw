@@ -1,28 +1,17 @@
-// Dear ImGui: standalone example application for SDL3 + SDL_Renderer
-// (SDL is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan/Metal graphics context creation, etc.)
-
-// Learn about Dear ImGui:
-// - FAQ                  https://dearimgui.com/faq
-// - Getting Started      https://dearimgui.com/getting-started
-// - Documentation        https://dearimgui.com/docs (same as your local docs/ folder).
-// - Introduction, links and more at the top of imgui.cpp
-
-// Important to understand: SDL_Renderer is an _optional_ component of SDL3.
-// For a multi-platform app consider using e.g. SDL+DirectX on Windows and SDL+OpenGL on Linux/OSX.
+// NurbsDraw - NURBS Curve Drawing Application
+// Built with SDL3 + Dear ImGui
 
 #include "SDL3/SDL.h"
 #include "imgui.h"
 #include "imgui_impl_sdl3.h"
 #include "imgui_impl_sdlrenderer3.h"
-#include "gui/window/DrawBezier.h"
-#include "gui/window/Manager.h"
+#include "app/AppController.h"
+#include "ui/windows/curve2d.h"
+#include "ui/windows/curve3d.h"
 #include <stdio.h>
 
-
-// Main code
-int main(int, char **) {
+int main(int, char**) {
     // Setup SDL
-    // [If using SDL_MAIN_USE_CALLBACKS: all code below until the main loop starts would likely be your SDL_AppInit() function]
     if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {
         printf("Error: SDL_Init(): %s\n", SDL_GetError());
         return 1;
@@ -31,12 +20,12 @@ int main(int, char **) {
     // Create window with SDL_Renderer graphics context
     float main_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
     SDL_WindowFlags window_flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY;
-    SDL_Window *window = SDL_CreateWindow("Dear ImGui SDL3+SDL_Renderer example", (int)(1280 * main_scale), (int)(800 * main_scale), window_flags);
+    SDL_Window* window = SDL_CreateWindow("NurbsDraw", (int)(1280 * main_scale), (int)(800 * main_scale), window_flags);
     if (window == nullptr) {
         printf("Error: SDL_CreateWindow(): %s\n", SDL_GetError());
         return 1;
     }
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, nullptr);
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, nullptr);
     SDL_SetRenderVSync(renderer, 1);
     if (renderer == nullptr) {
         SDL_Log("Error: SDL_CreateRenderer(): %s\n", SDL_GetError());
@@ -48,38 +37,28 @@ int main(int, char **) {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO &io = ImGui::GetIO();
+    ImGuiIO& io = ImGui::GetIO();
     (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
-    // Setup Dear ImGui style
     ImGui::StyleColorsDark();
-    // ImGui::StyleColorsLight();
 
-    // Setup scaling
-    ImGuiStyle &style = ImGui::GetStyle();
-    style.ScaleAllSizes(main_scale); // Bake a fixed style scale. (until we have a solution for dynamic style scaling, changing this requires resetting Style + calling this again)
-    style.FontScaleDpi = main_scale; // Set initial font scale. (in docking branch: using io.ConfigDpiScaleFonts=true automatically overrides this for every window depending on the current monitor)
+    ImGuiStyle& style = ImGui::GetStyle();
+    style.ScaleAllSizes(main_scale);
+    style.FontScaleDpi = main_scale;
 
     // Setup Platform/Renderer backends
     ImGui_ImplSDL3_InitForSDLRenderer(window, renderer);
     ImGui_ImplSDLRenderer3_Init(renderer);
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+    // Application controller
+    AppController app;
+
     // Main loop
     bool done = false;
-
-    // Window manager and UI state moved to dedicated window function
-    auto &wm = WindowManager::Get();
-
     while (!done) {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application, or clear/overwrite your copy of the keyboard data.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        // [If using SDL_MAIN_USE_CALLBACKS: call ImGui_ImplSDL3_ProcessEvent() from your SDL_AppEvent() function]
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             ImGui_ImplSDL3_ProcessEvent(&event);
@@ -89,20 +68,70 @@ int main(int, char **) {
                 done = true;
         }
 
-        // [If using SDL_MAIN_USE_CALLBACKS: all code below would likely be your SDL_AppIterate() function]
         if (SDL_GetWindowFlags(window) & SDL_WINDOW_MINIMIZED) {
             SDL_Delay(10);
             continue;
         }
 
-        // Start the Dear ImGui frame
+        // Undo/Redo shortcuts
+        if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Z)) {
+            app.undo();
+        }
+        if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Y)) {
+            app.redo();
+        }
+
+        // Start Dear ImGui frame
         ImGui_ImplSDLRenderer3_NewFrame();
         ImGui_ImplSDL3_NewFrame();
         ImGui::NewFrame();
-        {
-            // forward to our refactored window implementation
-            draw_bezier(wm, "curve drawer");
+
+        // Main menu bar
+        if (ImGui::BeginMainMenuBar()) {
+            if (ImGui::BeginMenu("File")) {
+                if (ImGui::MenuItem("New", "Ctrl+N")) {
+                    app.clear_all();
+                }
+                if (ImGui::MenuItem("Save As...", "Ctrl+S")) {
+                    // TODO: save document
+                }
+                ImGui::Separator();
+                if (ImGui::MenuItem("Exit", "Alt+F4")) {
+                    done = true;
+                }
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Edit")) {
+                if (ImGui::MenuItem("Undo", "Ctrl+Z", false, app.can_undo())) {
+                    app.undo();
+                }
+                if (ImGui::MenuItem("Redo", "Ctrl+Y", false, app.can_redo())) {
+                    app.redo();
+                }
+                ImGui::Separator();
+                if (ImGui::MenuItem("Clear All", nullptr, false, app.can_undo())) {
+                    app.clear_all();
+                }
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("View")) {
+                ImGui::MenuItem("Show Grid", nullptr, true);
+                ImGui::MenuItem("Show Control Points", nullptr, true);
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Help")) {
+                if (ImGui::MenuItem("About")) {
+                    // About dialog
+                }
+                ImGui::EndMenu();
+            }
+            ImGui::EndMainMenuBar();
         }
+
+        // Draw windows
+        draw_curve2d_window(app);
+        draw_curve3d_window(app);
+
         // Rendering
         ImGui::Render();
         SDL_SetRenderScale(renderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
@@ -113,7 +142,6 @@ int main(int, char **) {
     }
 
     // Cleanup
-    // [If using SDL_MAIN_USE_CALLBACKS: all code below would likely be your SDL_AppQuit() function]
     ImGui_ImplSDLRenderer3_Shutdown();
     ImGui_ImplSDL3_Shutdown();
     ImGui::DestroyContext();

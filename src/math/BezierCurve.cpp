@@ -3,15 +3,15 @@
 #include "Vector.h"
 #include <vector>
 
-BezierCurve::BezierCurve(const std::vector<Vector> &vertices) : vertices(vertices) {
+BezierCurve::BezierCurve(const std::vector<Vec<>> &vertices) : vertices(vertices) {
 }
 
-void BezierCurve::set_vertices(const std::vector<Vector> &vertices) {
+void BezierCurve::set_vertices(const std::vector<Vec<>> &vertices) {
     this->vertices = vertices;
 }
 
-Vector BezierCurve::eval(double t) const {
-    Vector res{};
+Vec<> BezierCurve::eval(double t) const {
+    Vec<> res{};
     int n = vertices.size() - 1;
     for (auto i = 0; i <= n; i++) {
         res += B(i, n)(t) * vertices[i];
@@ -19,9 +19,9 @@ Vector BezierCurve::eval(double t) const {
     return res;
 }
 
-std::vector<Vector> sample_bezier_uniform(const BezierCurve &curve, int segments) {
+std::vector<Vec<>> sample_bezier_uniform(const BezierCurve &curve, int segments) {
     assert(segments >= 1);
-    std::vector<Vector> pts;
+    std::vector<Vec<>> pts;
     pts.reserve(segments + 1);
     for (int i = 0; i <= segments; ++i) {
         double t = static_cast<double>(i) / segments;

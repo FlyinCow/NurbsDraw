@@ -7,9 +7,9 @@
 // corrected spelling: BezierCurve (not Bezeir)
 class BezierCurve {
 public:
-    BezierCurve(const std::vector<Vector> &vertices);
-    void set_vertices(const std::vector<Vector> &vertices);
-    Vector eval(double t) const;
+    BezierCurve(const std::vector<Vec<>> &vertices);
+    void set_vertices(const std::vector<Vec<>> &vertices);
+    Vec<> eval(double t) const;
     auto &&vertex(this auto &&self, int i) {
         assert(i < self.vertices.size());
         assert(i >= 0);
@@ -17,8 +17,8 @@ public:
     }
 
 private:
-    std::vector<Vector> vertices;
+    std::vector<Vec<>> vertices;
 };
 
 // utility: uniformly sample points on the curve (segments >= 1)
-std::vector<Vector> sample_bezier_uniform(const BezierCurve &curve, int segments);
+std::vector<Vec<>> sample_bezier_uniform(const BezierCurve &curve, int segments);

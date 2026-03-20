@@ -11,8 +11,8 @@ void draw_bezier(WindowManager &wm, std::string window_name) {
     static std::vector<Vector> ctrl_points;
     static bool drawing = false;
     static int dragging_index = -1;
-    static ImVec2 view_offset = ImVec2(0, 0);
-    static float view_scale = 1.0f;
+    static ImVec2 view_offset = ImVec2(-100.0f, -100.0f);  // Start with a reasonable offset
+    static float view_scale = 5.0f;  // Start with a reasonable scale (pixels per world unit)
 
     ImGui::Begin(window_name.c_str());
     // three-column layout: button, canvas, coordinates

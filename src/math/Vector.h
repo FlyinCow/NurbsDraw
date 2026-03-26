@@ -4,6 +4,7 @@
 #include <concepts>
 #include <cstddef>
 #include <format>
+#include <cmath>
 
 template <size_t Dim = 3, std::floating_point T = double>
     requires(Dim == 2 || Dim == 3)

@@ -18,10 +18,16 @@ FetchContent_Declare(
     EXCLUDE_FROM_ALL
 )
 
+FetchContent_Declare(
+    googletest
+    URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
+    
+enable_testing()
 set(SDL_STATIC ON)
 set(SDL_SHARED OFF)
 
-FetchContent_MakeAvailable(imgui sdl3)
+FetchContent_MakeAvailable(imgui sdl3 googletest)
 
 
 add_library(imgui_lib STATIC

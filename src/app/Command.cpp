@@ -10,8 +10,9 @@ void CommandManager::execute(std::unique_ptr<ICommand> command) {
 }
 
 void CommandManager::undo() {
-    if (undo_stack_.empty()) return;
-    
+    if (undo_stack_.empty())
+        return;
+
     auto command = std::move(undo_stack_.back());
     undo_stack_.pop_back();
     command->undo();
@@ -19,8 +20,9 @@ void CommandManager::undo() {
 }
 
 void CommandManager::redo() {
-    if (redo_stack_.empty()) return;
-    
+    if (redo_stack_.empty())
+        return;
+
     auto command = std::move(redo_stack_.back());
     redo_stack_.pop_back();
     command->execute();
@@ -28,12 +30,14 @@ void CommandManager::redo() {
 }
 
 std::string CommandManager::get_undo_description() const {
-    if (undo_stack_.empty()) return "";
+    if (undo_stack_.empty())
+        return "";
     return undo_stack_.back()->get_description();
 }
 
 std::string CommandManager::get_redo_description() const {
-    if (redo_stack_.empty()) return "";
+    if (redo_stack_.empty())
+        return "";
     return redo_stack_.back()->get_description();
 }
 
@@ -44,8 +48,9 @@ void CommandManager::clear() {
 
 // AddPointCommand implementation
 
-AddPointCommand::AddPointCommand(std::vector<Vector> &points, const Vector &point, size_t position)
-    : points_(points), point_(point), position_(position) {}
+AddPointCommand::AddPointCommand(std::vector<Vec3d> &points, const Vec3d &point, size_t position)
+    : points_(points), point_(point), position_(position) {
+}
 
 void AddPointCommand::execute() {
     if (position_ <= points_.size()) {
@@ -67,8 +72,9 @@ std::string AddPointCommand::get_description() const {
 
 // RemovePointCommand implementation
 
-RemovePointCommand::RemovePointCommand(std::vector<Vector> &points, size_t position)
-    : points_(points), position_(position) {}
+RemovePointCommand::RemovePointCommand(std::vector<Vec3d> &points, size_t position)
+    : points_(points), position_(position) {
+}
 
 void RemovePointCommand::execute() {
     if (position_ < points_.size()) {
@@ -89,8 +95,9 @@ std::string RemovePointCommand::get_description() const {
 
 // MovePointCommand implementation
 
-MovePointCommand::MovePointCommand(std::vector<Vector> &points, size_t position, const Vector &new_position)
-    : points_(points), position_(position), new_position_(new_position) {}
+MovePointCommand::MovePointCommand(std::vector<Vec3d> &points, size_t position, const Vec3d &new_position)
+    : points_(points), position_(position), new_position_(new_position) {
+}
 
 void MovePointCommand::execute() {
     if (position_ < points_.size()) {
@@ -111,12 +118,13 @@ std::string MovePointCommand::get_description() const {
 
 // BatchCommand implementation
 
-BatchCommand::BatchCommand(std::function<void()> execute_fn, 
+BatchCommand::BatchCommand(std::function<void()> execute_fn,
                            std::function<void()> undo_fn,
                            const std::string &description)
     : execute_fn_(std::move(execute_fn)),
       undo_fn_(std::move(undo_fn)),
-      description_(description) {}
+      description_(description) {
+}
 
 void BatchCommand::execute() {
     execute_fn_();

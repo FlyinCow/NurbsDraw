@@ -22,7 +22,8 @@
             "description": "Windows build using WindowsToolchain clang-cl",
             "toolchainFile": "${sourceDir}/cmake/WindowsToolChain/Windows.MSVC.toolchain.cmake",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
+                "CMAKE_BUILD_TYPE": "Debug",
+                "Qt6_DIR": "D:/Apps/qt/6.11.0/msvc2022_64/lib/cmake/Qt6"
             },
             "condition": {
                 "type": "equals",
@@ -38,7 +39,8 @@
             "description": "Windows build using WindowsToolchain clang-cl",
             "toolchainFile": "${sourceDir}/cmake/WindowsToolChain/Windows.Clang.toolchain.cmake",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
+                "CMAKE_BUILD_TYPE": "Debug",
+                "Qt6_DIR": "D:/Apps/qt/6.11.0/msvc2022_64/lib/cmake/Qt6"
             },
             "condition": {
                 "type": "equals",

@@ -14,9 +14,15 @@ FetchContent_Declare(
     URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
 )
 
-enable_testing()
-FetchContent_MakeAvailable(googletest)
+FetchContent_Declare(
+  msft_proxy4
+  GIT_TAG 4.0.0 # or above
+  GIT_REPOSITORY https://github.com/ngcpp/proxy.git
+)
 
+FetchContent_MakeAvailable(googletest msft_proxy4)
+
+enable_testing()
 # ---- Your app ----
 set(sources
     src/app/AppController.cpp
@@ -44,6 +50,7 @@ target_link_libraries(${PROJECT_NAME}
     Qt6::Widgets
     Qt6::Core
     Qt6::Gui
+    msft_proxy4::proxy
 )
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_23)

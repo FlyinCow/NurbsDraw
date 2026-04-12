@@ -24,18 +24,10 @@ FetchContent_MakeAvailable(googletest msft_proxy4)
 
 enable_testing()
 # ---- Your app ----
-set(sources
-    src/app/AppController.cpp
-    src/app/Command.cpp
-    src/app/Document.cpp
-    src/math/Vector.cpp
-    src/math/BezierCurve.cpp
-    src/math/BernsteinBase.cpp
-    src/math/BCurve.cpp
-    src/math/BSurface.cpp
-    src/math/Fitting.cpp
-    src/ui/QtCanvas.cpp
-    src/ui/Curve2DWindow.cpp
+
+file(GLOB sources 
+    src/math/*.cpp
+    src/ui/*.cpp    
 )
 
 # ---- Enable Qt automoc ----

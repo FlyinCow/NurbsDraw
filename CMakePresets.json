@@ -53,8 +53,9 @@
             "inherits": "base",
             "displayName": "Linux Clang",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_CXX_COMPILER": "clang++"
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_CXX_COMPILER": "clang",
+                "CMAKE_CXX_FLAGS": ""
             },
             "condition": {
                 "type": "equals",
@@ -67,7 +68,7 @@
             "inherits": "base",
             "displayName": "Linux GCC",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_CXX_COMPILER": "g++"
             },
             "condition": {

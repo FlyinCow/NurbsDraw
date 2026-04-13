@@ -3,13 +3,13 @@
 #include "concepts.h"
 #include <vector>
 
-std::vector<Vec2d> Curve2dSampler::sample(Curve2dProxy c) {
+std::vector<Vec2d> Curve2dSampler::sample(Curve2Proxy c) {
     std::vector<Vec2d> points;
     this->sample_to(c, points);
     return points;
 }
 
-int Curve2dSampler::sample_to(Curve2dProxy c, std::vector<Vec2d> &points) {
+int Curve2dSampler::sample_to(Curve2Proxy c, std::vector<Vec2d> &points) {
     points.reserve(this->n_segements);
     auto [low_bound, high_bound] = c->get_range();
     auto step = (high_bound - low_bound) / this->n_segements;

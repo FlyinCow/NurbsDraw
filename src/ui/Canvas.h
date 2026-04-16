@@ -14,6 +14,8 @@ public:
     explicit Canvas2(QWidget *parent = nullptr);
 
     void add_curve(Curve2Proxy c);
+    void add_drawable(DrawableProxy d);
+    void remove_drawable(size_t i);
 
 protected:
     void paintEvent(QPaintEvent *event) override;

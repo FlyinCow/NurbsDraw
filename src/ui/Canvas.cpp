@@ -2,6 +2,7 @@
 #include "Drawable.h"
 #include "math/concepts.h"
 #include <QPainter>
+#include <algorithm>
 
 Canvas2::Canvas2(QWidget *parent) : QWidget(parent) {
 }
@@ -25,8 +26,16 @@ void Canvas2::paintEvent(QPaintEvent *) {
     double penWidth = 1.0 / scaleX;
     painter.setPen(QPen(Qt::blue, penWidth));
 
-    for (auto s : drawables) {
+    for (auto &s : drawables) {
         s->draw_on(painter);
     }
     painter.restore();
+}
+
+void Canvas2::add_drawable(DrawableProxy d) {
+    drawables.push_back(std::forward<DrawableProxy>(d));
+}
+
+void Canvas2::remove_drawable(size_t i) {
+    drawables.erase(drawables.begin() + i);
 }

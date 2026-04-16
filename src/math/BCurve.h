@@ -17,7 +17,12 @@ public:
     int degree() const {
         return degree_;
     }
+
     inline const std::vector<Vec2d> &vertices() const noexcept {
+        return vertices_;
+    }
+
+    inline const std::vector<Vec2d> &get_control_points() const noexcept {
         return vertices_;
     }
 
@@ -49,4 +54,3 @@ private:
     std::vector<int> mults_;
     std::vector<double> flat_knots_; // 展开后的knot序列
 };
-

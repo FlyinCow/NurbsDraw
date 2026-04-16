@@ -36,5 +36,5 @@ $$
 C(t)=\frac{\sum_{i=0}^{n} N_{i,p}(t) w_i \vec P_i}{\sum_{i=0}^{n} N_{i,p}(t) w_i}
 $$
 
-## Concepts
-
+# TODOs
+- [ ] different units for math calculation and drawing

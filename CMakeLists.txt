@@ -3,7 +3,7 @@ project(NurbsDraw CXX)
 set(CMAKE_CXX_STANDARD 23)
 
 # ---- Qt6 ----
-find_package(Qt6 REQUIRED COMPONENTS Widgets Core Gui)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Core Gui CanvasPainter)
 
 # ---- FetchContent ----
 include(FetchContent)
@@ -16,7 +16,7 @@ FetchContent_Declare(
 
 FetchContent_Declare(
   msft_proxy4
-  GIT_TAG 4.0.0 # or above
+  GIT_TAG 4.0.2 # or above
   GIT_REPOSITORY https://github.com/ngcpp/proxy.git
 )
 
@@ -42,6 +42,7 @@ target_link_libraries(${PROJECT_NAME}
     Qt6::Widgets
     Qt6::Core
     Qt6::Gui
+    Qt6::CanvasPainter
     msft_proxy4::proxy
 )
 

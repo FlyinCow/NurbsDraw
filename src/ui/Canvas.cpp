@@ -1,36 +1,32 @@
-#include "QtCanvas.h"
+#include "Canvas.h"
+#include "Drawable.h"
+#include "math/concepts.h"
 #include <QPainter>
 
-Canvas2::Canvas2(QWidget* parent) : QWidget(parent) {
-    // 固定初始 B-spline
-    ctrl_points_ = {{0, 0, 0}, {1, 2, 0}, {2, 1, 0}, {3, 3, 0}};
-    int degree = 3;
-    // Clamped cubic B-spline: flat knots = [0,0,0,0,1,1,1,1]
-    std::vector<double> knots = {0.0, 1.0};
-    std::vector<int> mults = {degree + 1, degree + 1};
-    curve_ = std::make_shared<BCurve>(degree, ctrl_points_, knots, mults);
+Canvas2::Canvas2(QWidget *parent) : QWidget(parent) {
 }
 
-void Canvas2::paintEvent(QPaintEvent*) {
+void Canvas2::add_curve(Curve2Proxy c) {
+    drawables.push_back(new CommonCurve2Drawer(c));
+}
+
+void Canvas2::paintEvent(QPaintEvent *) {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.fillRect(rect(), Qt::white);
 
-    // 绘制控制点（红色）
-    painter.setPen(Qt::red);
-    for (const auto& p : ctrl_points_) {
-        painter.drawEllipse(QPointF(p.x() * 50 + 100, height() - (p.y() * 50 + 100)), 5, 5);
-    }
+    painter.save();
+    painter.translate(50, height() - 50);
+    double scaleX = width() / 8.0;
+    double scaleY = height() / 8.0;
+    painter.scale(scaleX, -scaleY);
 
-    // 绘制曲线（蓝色）
-    painter.setPen(Qt::blue);
-    const int segments = 100;
-    QPointF prev;
-    for (int i = 0; i <= segments; i++) {
-        double t = static_cast<double>(i) / segments;
-        Vec3d p = curve_->eval(t);
-        QPointF pt(p.x() * 50 + 100, height() - (p.y() * 50 + 100));
-        if (i > 0) painter.drawLine(prev, pt);
-        prev = pt;
+    // Pen width in device pixels (constant regardless of zoom)
+    double penWidth = 1.0 / scaleX;
+    painter.setPen(QPen(Qt::blue, penWidth));
+
+    for (auto s : drawables) {
+        s->draw_on(painter);
     }
+    painter.restore();
 }

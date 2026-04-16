@@ -38,5 +38,3 @@ $$
 
 ## Concepts
 
-Evaluator: takes a C and a u, gives a Vec3
-Discretizor: takes a C and an Evaluator, gives an array of Vec3 to draw

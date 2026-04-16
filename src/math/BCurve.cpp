@@ -1,10 +1,10 @@
 #include "BCurve.h"
-#include <cassert>
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 
-BCurve::BCurve(int degree, const std::vector<Vec3d>& vertices,
-               const std::vector<double>& knots, const std::vector<int>& mults)
+BCurve2::BCurve2(int degree, const std::vector<Vec2d> &vertices,
+                 const std::vector<double> &knots, const std::vector<int> &mults)
     : degree_(degree), vertices_(vertices), knots_(knots), mults_(mults) {
     assert(degree > 0);
     assert(vertices.size() >= static_cast<size_t>(degree + 1));
@@ -18,9 +18,10 @@ BCurve::BCurve(int degree, const std::vector<Vec3d>& vertices,
 }
 
 // Cox-de Boor 基函数递归
-static double basis_function(double t, int i, int p, const std::vector<double>& U) {
+static double basis_function(double t, int i, int p, const std::vector<double> &U) {
     if (p == 0) {
-        if (t >= U[i] && t < U[i + 1]) return 1.0;
+        if (t >= U[i] && t < U[i + 1])
+            return 1.0;
         return 0.0;
     }
     double left = 0.0, right = 0.0;
@@ -31,10 +32,11 @@ static double basis_function(double t, int i, int p, const std::vector<double>& 
     return left + right;
 }
 
-Vec3d BCurve::eval(double t) const {
+Vec2d BCurve2::eval(double t) const {
     // clamp到有效范围
     t = std::clamp(t, t_min(), t_max());
-    if (t >= t_max()) return vertices_.back();
+    if (t >= t_max())
+        return vertices_.back();
 
     int n = static_cast<int>(vertices_.size()) - 1;
 
@@ -42,41 +44,24 @@ Vec3d BCurve::eval(double t) const {
     int low = degree_, high = n + 1;
     while (low < high) {
         int mid = (low + high) / 2;
-        if (t < flat_knots_[mid]) high = mid;
-        else low = mid + 1;
+        if (t < flat_knots_[mid])
+            high = mid;
+        else
+            low = mid + 1;
     }
     int span = std::min(low - 1, n);
 
     // 计算基函数并求和
-    Vec3d result{};
+    Vec2d result{};
     for (int i = 0; i <= degree_; i++) {
         int idx = span - degree_ + i;
-        if (idx < 0) idx = 0;
-        if (idx > n) idx = n;
+        if (idx < 0)
+            idx = 0;
+        if (idx > n)
+            idx = n;
         double N = basis_function(t, idx, degree_, flat_knots_);
         result += N * vertices_[idx];
     }
     return result;
 }
 
-// clamped knot向量（端点重复degree+1次）
-std::vector<double> generate_curve_knots_clamped(int degree, int num_control_points) {
-    int m = num_control_points + degree + 1;
-    std::vector<double> knots(m);
-    for (int i = 0; i <= degree; i++) knots[i] = 0.0;
-    for (int i = m - degree - 1; i < m; i++) knots[i] = 1.0;
-    return knots;
-}
-
-// 均匀采样曲线上点
-std::vector<Vec3d> sample_bcurve_uniform(const BCurve& curve, int segments) {
-    assert(segments >= 1);
-    std::vector<Vec3d> pts;
-    pts.reserve(segments + 1);
-    double t0 = curve.t_min(), t1 = curve.t_max();
-    for (int i = 0; i <= segments; i++) {
-        double t = t0 + (t1 - t0) * static_cast<double>(i) / segments;
-        pts.push_back(curve.eval(t));
-    }
-    return pts;
-}

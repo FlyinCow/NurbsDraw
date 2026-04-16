@@ -1,6 +1,8 @@
 #include "Sampler.h"
 #include "Vector.h"
 #include "concepts.h"
+#include <format>
+#include <print>
 #include <vector>
 
 std::vector<Vec2d> Curve2dSampler::sample(Curve2Proxy c) {

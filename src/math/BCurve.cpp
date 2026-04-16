@@ -1,7 +1,6 @@
 #include "BCurve.h"
 #include <algorithm>
 #include <cassert>
-#include <cmath>
 
 BCurve2::BCurve2(int degree, const std::vector<Vec2d> &vertices,
                  const std::vector<double> &knots, const std::vector<int> &mults)

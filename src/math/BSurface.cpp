@@ -1,8 +1,7 @@
 #include "BSurface.h"
-#include "Vector.h"
+#include "Vec.h"
 #include <cassert>
 #include <algorithm>
-#include <numeric>
 
 BSurface::BSurface(int degree_u, int degree_v,
                    const std::vector<std::vector<Vec<>>> &ctrl_points,

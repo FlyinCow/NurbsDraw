@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/Vector.h"
+#include "math/Vec.h"
 #include "math/concepts.h"
 #include "proxy/v4/proxy.h"
 #include "proxy/v4/proxy_macros.h"

@@ -1,6 +1,6 @@
 #include "Curve2DWindow.h"
 #include "Canvas.h"
-#include "math/Vector.h"
+#include "math/Vec.h"
 #include <QHBoxLayout>
 
 Curve2Window::Curve2Window(QWidget *parent)
